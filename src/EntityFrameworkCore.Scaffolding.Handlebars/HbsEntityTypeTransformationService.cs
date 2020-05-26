@@ -33,6 +33,12 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
         public Func<EntityPropertyInfo, EntityPropertyInfo> NavPropertyTransformer { get; }
 
         /// <summary>
+        /// DbSet name transformer.
+        /// </summary>
+        public Func<string, string> DbSetNameTransformer { get; }
+
+
+        /// <summary>
         /// HbsEntityTypeTransformationService constructor.
         /// </summary>
         /// <param name="entityNameTransformer">Entity name transformer.</param>
@@ -40,18 +46,21 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
         /// <param name="constructorTransformer">Constructor transformer.</param>
         /// <param name="propertyTransformer">Property name transformer.</param>
         /// <param name="navPropertyTransformer">Navigation property name transformer.</param>
+        /// <param name="dbSetNameTransformer">DbSet Name transformer</param>
         public HbsEntityTypeTransformationService(
             Func<string, string> entityNameTransformer = null,
             Func<string, string> entityFileNameTransformer = null,
             Func<EntityPropertyInfo, EntityPropertyInfo> constructorTransformer = null,
             Func<EntityPropertyInfo, EntityPropertyInfo> propertyTransformer = null,
-            Func<EntityPropertyInfo, EntityPropertyInfo> navPropertyTransformer = null)
+            Func<EntityPropertyInfo, EntityPropertyInfo> navPropertyTransformer = null,
+            Func<string, string> dbSetNameTransformer = null)
         {
             EntityNameTransformer = entityNameTransformer;
             EntityFileNameTransformer = entityFileNameTransformer;
             ConstructorTransformer = constructorTransformer;
             PropertyTransformer = propertyTransformer;
             NavPropertyTransformer = navPropertyTransformer;
+            DbSetNameTransformer = dbSetNameTransformer;
         }
 
         /// <summary>
@@ -175,6 +184,16 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
             }
 
             return transformedNavProperties;
+        }
+
+        /// <summary>
+        /// Transform DbSet name.
+        /// </summary>
+        /// <param name="dbSetName">Entity DbSetName </param>
+        /// <returns>Transformed DbSet name</returns>
+        public string TransformDbSetName(string dbSetName)
+        {
+            return DbSetNameTransformer?.Invoke(dbSetName) ?? dbSetName;
         }
     }
 }

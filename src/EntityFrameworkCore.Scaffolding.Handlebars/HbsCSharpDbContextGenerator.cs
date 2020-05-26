@@ -328,10 +328,11 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
             foreach (var entityType in model.GetScaffoldEntityTypes(_options.Value))
             {
                 var transformedEntityName = EntityTypeTransformationService.TransformEntityName(entityType.Name);
+                var TransformedPropertyName = EntityTypeTransformationService.TransformDbSetName(entityType.GetDbSetName());
                 dbSets.Add(new Dictionary<string, object>
                 {
                     { "set-property-type", transformedEntityName },
-                    { "set-property-name", entityType.GetDbSetName() },
+                    { "set-property-name", TransformedPropertyName },
                     { "nullable-reference-types",  _options?.Value?.EnableNullableReferenceTypes == true }
                 });
             }
@@ -542,9 +543,10 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
             var tableName = entityType.GetTableName();
             var schema = entityType.GetSchema();
             var defaultSchema = entityType.Model.GetDefaultSchema();
+            var transformedPropertyName = EntityTypeTransformationService.TransformDbSetName(entityType.GetDbSetName());
 
             var explicitSchema = schema != null && schema != defaultSchema;
-            var explicitTable = explicitSchema || tableName != null && tableName != entityType.GetDbSetName();
+            var explicitTable = explicitSchema || tableName != null && tableName != transformedPropertyName;
 
             var isView = entityType.FindAnnotation(RelationalAnnotationNames2.ViewDefinition) != null;
             if (explicitTable || isView)

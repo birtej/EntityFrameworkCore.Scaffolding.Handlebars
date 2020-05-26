@@ -57,5 +57,13 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
         /// <param name="navProperties">Entity type navigation properties.</param>
         /// <returns>Transformed entity type navigation properties.</returns>
         List<Dictionary<string, object>> TransformNavigationProperties(List<Dictionary<string, object>> navProperties);
+
+        /// <summary>
+        /// Transform DbSet name.
+        /// </summary>
+        /// <param name="dbsetName">Entity type name.</param>
+        /// <returns>Transformed entity type name.</returns>
+        string TransformDbSetName(string dbSetName);
+
     }
 }

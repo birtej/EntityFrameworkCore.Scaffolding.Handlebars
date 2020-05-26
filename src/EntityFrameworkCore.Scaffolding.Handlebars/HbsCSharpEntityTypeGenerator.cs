@@ -303,9 +303,10 @@ namespace EntityFrameworkCore.Scaffolding.Handlebars
             var tableName = entityType.GetTableName();
             var schema = entityType.GetSchema();
             var defaultSchema = entityType.Model.GetDefaultSchema();
+            var transformedPropertyName = EntityTypeTransformationService.TransformDbSetName(entityType.GetDbSetName());
 
             var schemaParameterNeeded = schema != null && schema != defaultSchema;
-            var tableAttributeNeeded = schemaParameterNeeded || tableName != null && tableName != entityType.GetDbSetName();
+            var tableAttributeNeeded = schemaParameterNeeded || tableName != null && tableName != transformedPropertyName;
 
             if (tableAttributeNeeded)
             {
